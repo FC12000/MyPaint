@@ -16,12 +16,13 @@ Menu screen
 <br>
 
 Paint screen
-- [ ] Default to paintbrush or pen
-- [ ] Default to red brush color
-- [ ] Default to white or baked in background image
+- [x] Default to ~~paintbrush~~ or pen
+- [x] Default to red brush color
+- [ ] Default to white or ~~baked in background image~~
 - [ ] Control to delete or undo last path/swipe
 - [ ] Control to save sketch
 - [ ] Control to share the sketch
+- [ ] Add paintbrush control
 <br>
 
 Share sketch
