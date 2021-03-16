@@ -164,7 +164,10 @@ public class PaintView extends View {
                 touchUp();
                 invalidate();
                 break;
-
+            case MotionEvent.ACTION_CANCEL :
+                touchUp();
+                invalidate();
+                break;
         }
 
         return true;
