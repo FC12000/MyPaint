@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu. This adds items to the menu if the menu is present
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.undo:
+                paintView.undo();
+                return true;
             case R.id.normal:
                 paintView.normal();
                 return true;

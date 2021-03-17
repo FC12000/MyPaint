@@ -13,10 +13,13 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+
+import static android.widget.Toast.*;
 
 public class PaintView extends View {
 
@@ -28,6 +31,7 @@ public class PaintView extends View {
     private Path mPath;
     private Paint mPaint;
     private ArrayList<FingerPath> paths = new ArrayList(); // Init finger paths array
+    private ArrayList<FingerPath> undonePaths = new ArrayList();
     private int currentColor;
     private int backgroundColor = DEFAULT_BG_COLOR;
     private int strokeWidth;
@@ -92,8 +96,17 @@ public class PaintView extends View {
     public void clear() {
         backgroundColor = DEFAULT_BG_COLOR;
         paths.clear();
-        normal();
+        //normal();
         invalidate();
+    }
+
+    // Method to undo last drawn finger path
+    public void undo() {
+        if (paths.size() > 0) {
+            undonePaths.add(paths.remove(paths.size() - 1));
+            invalidate();
+        }
+        Toast.makeText(getContext(),"No paths to undo!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -119,6 +132,7 @@ public class PaintView extends View {
 
     private void touchStart(float x, float y) {
         mPath = new Path();
+        undonePaths.clear();    // Clear array of undone paths
         FingerPath fp = new FingerPath(currentColor, emboss, blur, strokeWidth, mPath);
         paths.add(fp);
 
@@ -154,22 +168,24 @@ public class PaintView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN :
                 touchStart(x, y);
-                invalidate();
+                //invalidate();
                 break;
             case MotionEvent.ACTION_MOVE :
                 touchMove(x, y);
-                invalidate();
+                //invalidate();
                 break;
             case MotionEvent.ACTION_UP :
-                touchUp();
+                /*touchUp();
                 invalidate();
-                break;
+                break;*/
             case MotionEvent.ACTION_CANCEL :
                 touchUp();
-                invalidate();
+                //invalidate();
                 break;
         }
 
+        // Redraw after the touch event
+        invalidate();
         return true;
     }
 }
