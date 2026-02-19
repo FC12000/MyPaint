@@ -31,3 +31,9 @@ Share sketch
 
 Testing<br>
 - [ ] TBD
+<br>
+
+Updates
+* 18 Feb 2026 
+* * Updated the project to target Android SDK 34 and Gradle 8.x
+* * Updated .gitignore with new jetbrain files

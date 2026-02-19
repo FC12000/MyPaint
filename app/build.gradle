@@ -3,8 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.mypaint"
@@ -26,6 +25,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.example.mypaint'
 }
 
 dependencies {

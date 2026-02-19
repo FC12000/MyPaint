@@ -5,7 +5,7 @@
     <item
         android:id="@+id/undo"
         app:showAsAction="ifRoom"
-        android:title="Undo"
+        android:title="@string/undo"
         android:icon="@drawable/ic_undo_black_48dp" />
 
     <item
