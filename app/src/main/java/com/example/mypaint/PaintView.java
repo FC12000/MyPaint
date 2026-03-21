@@ -99,8 +99,9 @@ public class PaintView extends View {
             paths.clear();
             //normal();
             invalidate();
+        } else {
+            Toast.makeText(getContext(), "No drawing to clear!", LENGTH_SHORT).show();
         }
-        Toast.makeText(getContext(), "No drawing to clear!", LENGTH_SHORT).show();
     }
 
     // Method to undo last drawn finger path
@@ -108,8 +109,9 @@ public class PaintView extends View {
         if (paths.size() > 0) {
             undonePaths.add(paths.remove(paths.size() - 1));
             invalidate();
+        } else {
+            Toast.makeText(getContext(),"No drawing to undo!", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getContext(),"No drawing to undo!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
