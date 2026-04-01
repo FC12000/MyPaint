@@ -8,15 +8,21 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.compose.runtime.getValue    // for use by with state for topbar drop-down menu
+import androidx.compose.runtime.setValue    // for use by with state for topbar drop-down menu
+import androidx.compose.runtime.mutableStateOf  // for use by with state for topbar drop-down menu
+import androidx.compose.runtime.remember    // for use by with state for topbar drop-down menu
 
 class MainActivity : ComponentActivity() {
 
@@ -47,6 +53,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
+                // remember drop-down menu state
+                var menuExpanded by remember { mutableStateOf(false) }
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -57,6 +66,30 @@ class MainActivity : ComponentActivity() {
                                 }
                                 IconButton(onClick = { paintView.clear() }) {
                                     Icon(Icons.Default.Clear, contentDescription = "Clear")
+                                }
+                                Box {
+                                    IconButton(onClick = { menuExpanded = true }) {
+                                        Icon(Icons.Default.Settings, contentDescription = "Filters")
+                                    }
+                                    DropdownMenu(
+                                        expanded = menuExpanded,
+                                        onDismissRequest = { menuExpanded = false }
+                                    ) {
+                                        DropdownMenuItem(
+                                            text = { Text("Normal") },
+                                            onClick = {
+                                                paintView.normal()
+                                                menuExpanded = false
+                                            }
+                                        )
+                                        DropdownMenuItem(
+                                            text = { Text("Blur") },
+                                            onClick = {
+                                                paintView.blur()
+                                                menuExpanded = false
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         )
