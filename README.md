@@ -20,10 +20,10 @@ Paint screen
 - [x] Default to red brush color
 - [x] Default to white or ~~baked in background image~~
 - [x] Control to ~~delete~~ or undo last path/swipe
-- [ ] Control to save sketch
+- [x] Control to save sketch
 - [ ] Control to share the sketch
 - [ ] Add paintbrush control
-- [] Replace title bar with M3 style UI components
+- [x] Replace title bar with M3 style UI components
 - [] Add control to go to the Menu screen, save current sketch confirmation
 <br>
 
@@ -36,6 +36,11 @@ Testing<br>
 <br>
 
 Updates
+* 17 July 2026
+  * Added logic to save the drawing to a JSON file for fancy loading to replay the sketch
+  * Added simple load to just show the drawing
+  * Added Save and Load menu options
+  * Fixed an issue with losing the drawing after orientation change
 * 18 Mar 2026
   * Updated the project to use M3 components and top toolbar and Gradle 9.x
 * 18 Feb 2026 
