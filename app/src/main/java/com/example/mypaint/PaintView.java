@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -81,6 +82,21 @@ public class PaintView extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
+    // Resize the Bitmap and Canvas after orientation change
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        // Create a new bitmap with the new dimensions
+        if (w > 0 && h > 0) {
+            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            mCanvas = new Canvas(mBitmap);
+
+            // Note: Paths lists are not cleared here. onDraw() will use the new
+            // mCanvas and the drawing will be drawn on the new bitmap
+        }
+    }
+
     // Method to turn off Emboss and Blur effects
     public void normal() {
         //emboss = false;
@@ -139,8 +155,11 @@ public class PaintView extends View {
         mPath = new Path();
         undonePaths.clear();    // Clear array of undone paths
         FingerPath fp = new FingerPath(currentColor, emboss, blur, strokeWidth, mPath);
-        paths.add(fp);
 
+        // Capture the starting point coordinates
+        fp.points.add(new PointF(x, y));
+
+        paths.add(fp);
         mPath.reset();
         mPath.moveTo(x, y);
         mX = x;
@@ -154,6 +173,12 @@ public class PaintView extends View {
 
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
+
+            // Capture the coordinate points during movement
+            if (!paths.isEmpty()) {
+                paths.get(paths.size() - 1).points.add(new PointF(x, y));
+            }
+
             mX = x;
             mY = y;
         }
@@ -162,6 +187,11 @@ public class PaintView extends View {
     private void touchUp() {
         // Call this method when user lifts their finger at the end of the finger path
         mPath.lineTo(mX, mY);
+
+        // Capture the end coordinate point
+        if (!paths.isEmpty()) {
+            paths.get(paths.size() - 1).points.add(new PointF(mX, mY));
+        }
     }
 
     @Override
@@ -192,5 +222,28 @@ public class PaintView extends View {
         // Redraw after the touch event
         invalidate();
         return true;
+    }
+
+    public ArrayList<FingerPath> getPaths() {
+        return paths;
+    }
+
+    public void setPaths(ArrayList<FingerPath> loadedPaths) {
+        this.paths = loadedPaths;
+
+        // Create Path objects from the points in the loaded paths
+        for (FingerPath fp : paths) {
+            fp.path = new Path();
+            if (!fp.points.isEmpty()) {
+                PointF first = fp.points.get(0);
+                fp.path.moveTo(first.x, first.y);
+
+                for (int i = 1; i < fp.points.size(); i++) {
+                    PointF p = fp.points.get(i);
+                    fp.path.lineTo(p.x, p.y);
+                }
+            }
+        }
+        invalidate();   // Refresh the view to show the loaded drawing
     }
 }
